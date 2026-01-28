@@ -351,10 +351,10 @@ h1.title {
     padding: 10px;
     background-color: red;
     border-radius: 10px;
-    position: absolute;
-    bottom: max(50px, env(safe-area-inset-bottom)); 
-    right: 10px;
-    z-index: 9999; 
+    position: fixed; 
+    bottom: 30px; 
+    right: 20px;
+    z-index: 99999; 
     font-weight: bold;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
