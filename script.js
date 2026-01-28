@@ -110,15 +110,35 @@ document.getElementById('to-scratch-btn').addEventListener('click', () => {
 
 /* --- Helper Functions --- */
 // Slideshow
+// Slideshow - Fixed Timing & Preloading
 function startSlideshow() {
     const img = document.getElementById('slideshow-img');
     let idx = 0;
+    
+    // PRELOADER: Loads images in background so they don't lag
+    CONFIG.photos.forEach(src => {
+        const i = new Image();
+        i.src = src;
+    });
+
     img.src = CONFIG.photos[0];
+    
     setInterval(() => {
-        idx = (idx + 1) % CONFIG.photos.length;
+        // 1. Fade Out
         img.style.opacity = 0;
-        setTimeout(() => { img.src = CONFIG.photos[idx]; img.style.opacity = 1; }, 500);
-    }, 3000);
+        
+        // 2. Wait exactly 500ms (matches CSS transition) then swap
+        setTimeout(() => {
+            idx = (idx + 1) % CONFIG.photos.length;
+            img.src = CONFIG.photos[idx];
+            
+            // 3. Fade In
+            img.onload = () => { img.style.opacity = 1; };
+            // Fallback in case onload misses (cached images)
+            setTimeout(() => { img.style.opacity = 1; }, 50); 
+            
+        }, 500); 
+    }, 2500); // Change image every 2.5 seconds
 }
 
 // Typewriter
