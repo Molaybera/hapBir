@@ -11,13 +11,10 @@ const CONFIG = {
         "./img/6.jpg",
     ]
 };
-
 /* --- Game Logic --- */
 let score = 0;
 let gameActive = true;
 const heartSpawner = document.getElementById('heart-spawner');
-
-// Start Heart Spawner
 const spawnerInterval = setInterval(() => {
     if (!gameActive) return;
     const heart = document.createElement('div');
@@ -39,7 +36,6 @@ const spawnerInterval = setInterval(() => {
     heartSpawner.appendChild(heart);
     setTimeout(() => { if(heart.parentNode) heart.remove(); }, 7000);
 }, 800);
-
 document.getElementById('progress-container').style.display = 'block';
 function winGame() {
     gameActive = false; clearInterval(spawnerInterval);
@@ -52,26 +48,22 @@ function winGame() {
         setTimeout(() => card.classList.add('visible'), 50);
     }, 1000);
 }
-
 /* --- Stage Transitions --- */
-
 // 1. Gift -> Envelope
 document.getElementById('gift-btn').addEventListener('click', () => {
-    spawnBalloons(); // Start balloons immediately
+    spawnBalloons(); 
     confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     document.getElementById('gift-stage').style.display = 'none';
     const envStage = document.getElementById('envelope-stage');
     envStage.classList.remove('hidden');
     envStage.style.display = 'flex';
 });
-
 // 2. Open Envelope
 document.getElementById('envelope-btn').addEventListener('click', function() {
     if(this.classList.contains('open')) return;
     this.classList.add('open');
     document.getElementById('env-hint').style.display = 'none';
     
-    // Slide envelope out and show content
     setTimeout(() => {
         this.style.display = 'none';
         document.getElementById('opened-letter-content').style.display = 'flex';
@@ -79,8 +71,7 @@ document.getElementById('envelope-btn').addEventListener('click', function() {
         startSlideshow();
     }, 800);
 });
-
-// 3. Letter -> Cake (Changed Flow)
+// 3. Letter -> Cake
 document.getElementById('to-cake-btn').addEventListener('click', () => {
     const envStage = document.getElementById('envelope-stage');
     const cakeStage = document.getElementById('cake-stage');
@@ -92,8 +83,7 @@ document.getElementById('to-cake-btn').addEventListener('click', () => {
         setTimeout(() => cakeStage.style.opacity = 1, 50);
     }, 500);
 });
-
-// 4. Cake -> Scratch Card (New Flow)
+// 4. Cake -> Scratch Card
 document.getElementById('to-scratch-btn').addEventListener('click', () => {
     const cakeStage = document.getElementById('cake-stage');
     const scratchStage = document.getElementById('scratch-stage');
@@ -102,45 +92,38 @@ document.getElementById('to-scratch-btn').addEventListener('click', () => {
     setTimeout(() => {
         cakeStage.style.display = 'none';
         scratchStage.style.display = 'flex';
-        // Init Canvas
         initScratchCard();
         setTimeout(() => scratchStage.style.opacity = 1, 50);
     }, 500);
 });
-
 /* --- Helper Functions --- */
-// Slideshow
-// Slideshow - Fixed Timing & Preloading
+// Slideshow - Fixed Timing & Preloader
 function startSlideshow() {
     const img = document.getElementById('slideshow-img');
     let idx = 0;
     
-    // PRELOADER: Loads images in background so they don't lag
+    // Preload images
     CONFIG.photos.forEach(src => {
         const i = new Image();
         i.src = src;
     });
-
     img.src = CONFIG.photos[0];
     
     setInterval(() => {
-        // 1. Fade Out
         img.style.opacity = 0;
         
-        // 2. Wait exactly 500ms (matches CSS transition) then swap
+        // Wait for fade out
         setTimeout(() => {
             idx = (idx + 1) % CONFIG.photos.length;
             img.src = CONFIG.photos[idx];
             
-            // 3. Fade In
+            // Fade In
             img.onload = () => { img.style.opacity = 1; };
-            // Fallback in case onload misses (cached images)
             setTimeout(() => { img.style.opacity = 1; }, 50); 
             
         }, 500); 
-    }, 2500); // Change image every 2.5 seconds
+    }, 2500);
 }
-
 // Typewriter
 function typeWriter(el, text, i = 0) {
     if (i < text.length) {
@@ -148,43 +131,35 @@ function typeWriter(el, text, i = 0) {
         el.scrollTop = el.scrollHeight;
         setTimeout(() => typeWriter(el, text, i + 1), 40);
     } else {
-        // Show button to go to Cake
         setTimeout(() => document.getElementById('to-cake-btn').classList.remove('hidden'), 500);
     }
 }
-
 // Balloons
 function spawnBalloons() {
     const bg = document.getElementById('balloon-bg');
     const colors = ['#ff9ff3', '#feca57', '#ff6b6b', '#48dbfb'];
-    // Create loop
     setInterval(() => {
         const b = document.createElement('div');
         b.classList.add('balloon');
         b.style.left = Math.random() * 100 + 'vw';
         b.style.background = colors[Math.floor(Math.random() * colors.length)];
-        // Random speed between 5s and 10s
         b.style.animationDuration = (Math.random() * 5 + 5) + 's';
         bg.appendChild(b);
         setTimeout(() => b.remove(), 10000);
-    }, 500); // More frequent balloons
+    }, 500);
 }
-
 // Scratch Card Logic
 function initScratchCard() {
     const canvas = document.getElementById('scratch-canvas');
     const ctx = canvas.getContext('2d');
     const container = canvas.parentElement;
     
-    // Set canvas size
     canvas.width = container.offsetWidth;
     canvas.height = container.offsetHeight;
     
-    // Fill with overlay color
-    ctx.fillStyle = "#dfe6e9"; // Silver/Gray
+    ctx.fillStyle = "#dfe6e9";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // Text on overlay
     ctx.fillStyle = "#636e72";
     ctx.font = "bold 20px Nunito";
     ctx.textAlign = "center";
@@ -197,7 +172,6 @@ function initScratchCard() {
         ctx.arc(x, y, 20, 0, Math.PI * 2);
         ctx.fill();
         
-        // Simple check to reveal message
         if(Math.random() > 0.95) {
             document.getElementById('final-msg').classList.remove('hidden');
         }
@@ -215,7 +189,6 @@ function initScratchCard() {
             y: clientY - rect.top
         };
     }
-    // Events
     const start = () => isDrawing = true;
     const end = () => isDrawing = false;
     const move = (e) => {
@@ -231,7 +204,6 @@ function initScratchCard() {
     canvas.addEventListener('mousemove', move);
     canvas.addEventListener('touchmove', move, {passive: false});
 }
-
 // Cake Flame
 document.getElementById('flame').addEventListener('click', function() {
     this.classList.add('out');
@@ -239,7 +211,6 @@ document.getElementById('flame').addEventListener('click', function() {
     
     setTimeout(() => {
         document.getElementById('wished-msg').classList.remove('hidden');
-        // Show button to go to Scratch Card
         setTimeout(() => {
             document.getElementById('to-scratch-btn').classList.remove('hidden');
         }, 1000);
