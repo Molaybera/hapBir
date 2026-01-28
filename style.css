@@ -353,7 +353,7 @@ h1.title {
     /* KEY FIX: Center it at bottom to avoid corners */
     position: fixed;
     bottom: 40px; 
-    left: 80%;
+    left: 50%;
     transform: translateX(-50%);
     
     z-index: 99999; /* Highest Z-index */
