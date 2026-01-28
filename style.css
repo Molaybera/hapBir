@@ -1,0 +1,355 @@
+:root {
+    --bg-1: #ff9a9e;
+    --bg-2: #fad0c4;
+    --glass-bg: rgba(255, 255, 255, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --accent-pink: #ff6b81;
+    --paper-color: #fdfbf7;
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+body {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(120deg, var(--bg-1) 0%, var(--bg-2) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.Legend{
+    text-decoration: none;
+    color: #fdfbf7;
+    height: auto;
+    width: fit-content;
+    padding: 10px;
+    background-color: red;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+/* --- Ambient Background Particles --- */
+.bg-particle {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: floatUp linear infinite;
+}
+/* --- Continuous Balloons (Fixed Animation) --- */
+#balloon-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0; /* Behind everything */
+    overflow: hidden;
+}
+.balloon {
+    position: absolute;
+    bottom: -100px; /* Start below screen */
+    width: 30px;
+    height: 40px;
+    background: var(--accent-pink);
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: floatBalloon 15s linear infinite;
+}
+.balloon::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 10px;
+    background: rgba(255,255,255,0.8);
+}
+/* --- Game Interface --- */
+#game-ui {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 50;
+    pointer-events: none;
+}
+.instruction-toast {
+    position: absolute;
+    top: 15%; width: 90%; left: 5%;
+    text-align: center; color: white;
+    font-size: 1.5rem; font-weight: 800;
+    text-shadow: 0 2px 10px rgba(232, 67, 147, 0.4);
+    pointer-events: auto;
+    transition: opacity 0.5s;
+    animation: pulseText 2s infinite;
+}
+.progress-bar-container {
+    position: absolute;
+    top: 40px; left: 50%; transform: translateX(-50%);
+    width: 80%; max-width: 300px; height: 20px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50px; border: 2px solid rgba(255,255,255,0.8);
+    overflow: hidden; pointer-events: auto;
+    display: none;
+}
+.progress-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, #ff9ff3, #feca57);
+    transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.game-heart {
+    position: absolute;
+    font-size: 2.5rem; padding: 10px;
+    cursor: pointer;
+    animation: floatGame 6s linear infinite;
+    pointer-events: auto;
+    z-index: 60;
+}
+/* --- Main Card Container --- */
+.glass-card {
+    position: relative;
+    width: 90%; max-width: 500px;
+    min-height: 50vh; max-height: 90vh;
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 2px solid var(--glass-border);
+    border-radius: 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 20px;
+    z-index: 100;
+    transform: scale(0.8); opacity: 0;
+    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    overflow: hidden;
+}
+.glass-card.visible { transform: scale(1); opacity: 1; }
+h1.title {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    color: #fff; margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    line-height: 1.2; width: 100%;
+}
+
+.subtitle {
+    font-size: clamp(1rem, 4vw, 1.2rem);
+    color: #fff; margin-top: 10px;
+    font-weight: 600; opacity: 0.9;
+}
+/* --- Stage 1: Gift Box --- */
+.gift-wrapper {
+    position: relative; margin-top: 30px;
+    width: clamp(100px, 30vw, 150px); aspect-ratio: 1;
+    cursor: pointer; transition: transform 0.3s ease;
+}
+.gift-wrapper:hover { transform: scale(1.05) rotate(3deg); }
+.box-body {
+    position: absolute; bottom: 0; width: 100%; height: 85%;
+    background: linear-gradient(to bottom right, #fff0f5, #ffd1dc);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(232, 67, 147, 0.3);
+    display: flex; justify-content: center;
+    overflow: hidden;
+}
+.box-lid {
+    position: absolute; top: 0; left: -5%; width: 110%; height: 25%;
+    background: #ffffff; border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 2;
+}
+.box-ribbon {
+    position: absolute; width: 20%; height: 100%;
+    background: var(--accent-pink); left: 50%; transform: translateX(-50%); z-index: 1;
+}
+.lid-bow {
+    position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
+    width: 50%; height: 30%;
+}
+.lid-bow::before, .lid-bow::after {
+    content: ''; position: absolute;
+    width: 45%; height: 100%;
+    border: 4px solid var(--accent-pink); border-radius: 50%; top: 0;
+}
+.lid-bow::before { left: 0; transform: skew(10deg); }
+.lid-bow::after { right: 0; transform: skew(-10deg); }
+/* --- Stage 2: Envelope --- */
+.envelope-container {
+    position: relative;
+    width: clamp(180px, 50vw, 240px);
+    height: clamp(120px, 35vw, 160px);
+    background: #ff7675;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    margin-top: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    transition: transform 0.3s;
+}
+.envelope-container:hover { transform: scale(1.05); }
+
+.flap {
+    position: absolute; top: 0; left: 0;
+    width: 0; height: 0;
+    border-left: clamp(90px, 25vw, 120px) solid transparent;
+    border-right: clamp(90px, 25vw, 120px) solid transparent;
+    border-top: clamp(60px, 18vw, 90px) solid #ff5252;
+    transform-origin: top;
+    transition: transform 0.6s ease 0.5s, z-index 0.2s;
+    z-index: 5;
+}
+.envelope-container.open .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+.pocket {
+    position: absolute; bottom: 0; left: 0;
+    width: 0; height: 0;
+    border-left: clamp(90px, 25vw, 120px) solid transparent;
+    border-right: clamp(90px, 25vw, 120px) solid transparent;
+    border-bottom: clamp(60px, 18vw, 80px) solid #ff7675;
+    z-index: 4;
+}
+.pocket-front {
+    position: absolute; bottom: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.1) 100%);
+    z-index: 6;
+    pointer-events: none;
+}
+
+/* The Letter Content inside Envelope */
+.letter-content {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    animation: fadeIn 1s ease forwards;
+}
+
+/* --- Stage 3: Cake --- */
+.cake-stage {
+    display: none; flex-direction: column; align-items: center;
+    opacity: 0; transition: opacity 1s ease; width: 100%;
+}
+.cake-container {
+    position: relative; width: 200px; height: 200px;
+    margin-top: 30px; transform-origin: center bottom;
+}
+.cake-base {
+    position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+    width: 160px; height: 80px; background: #ff9ff3;
+    border-radius: 10px; box-shadow: inset -10px 0 0 rgba(0,0,0,0.05);
+}
+.cake-layer-top {
+    position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 60px; background: #feca57;
+    border-radius: 10px 10px 0 0; box-shadow: inset -10px 0 0 rgba(0,0,0,0.05); z-index: 2;
+}
+.cake-icing {
+    position: absolute; top: 0; left: -5px; width: 108%; height: 25px;
+    background: #fff; border-radius: 20px; z-index: 3;
+}
+.cake-icing::before { content: ''; position: absolute; width: 15px; height: 15px; top: 15px; left: 10px; background: #fff; border-radius: 0 0 20px 20px; box-shadow: 20px 5px 0 #fff, 40px -2px 0 #fff, 60px 8px 0 #fff; }
+.plate {
+    position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+    width: 200px; height: 15px; background: #ddd; border-radius: 50%;
+}
+.candle-container {
+    position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+    width: 12px; height: 40px;
+    background: repeating-linear-gradient(45deg, #fff, #fff 5px, #ff6b81 5px, #ff6b81 10px);
+    z-index: 4; border-radius: 2px;
+}
+.flame {
+    position: absolute; top: -25px; left: 50%; transform: translateX(-50%);
+    width: 20px; height: 25px; background: #ffda79;
+    border-radius: 50% 50% 20% 20%;
+    box-shadow: 0 0 10px #ffda79, 0 0 20px #ff9f43;
+    animation: flicker 0.5s infinite alternate; cursor: pointer; z-index: 10;
+}
+.flame.out { transform: translateX(-50%) scale(0); opacity: 0; }
+
+/* --- Stage 4: Scratch Card (Last) --- */
+.scratch-stage {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+.scratch-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 20px auto;
+    border: 4px solid #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    overflow: hidden;
+    background: white;
+}
+.scratch-image {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0; left: 0;
+    z-index: 1;
+}
+.scratch-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 2;
+    cursor: crosshair;
+    touch-action: none;
+}
+/* Shared Components */
+.photo-frame {
+    width: clamp(120px, 35vw, 160px); height: clamp(120px, 35vw, 160px);
+    background: white; padding: 5px; border-radius: 50%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 15px;
+    overflow: hidden; flex-shrink: 0;
+    animation: floatPhoto 4s ease-in-out infinite;
+}
+.photo-frame img {
+    width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+    border: 2px solid #ffdde1; transition: opacity 1s ease-in-out;
+}
+.letter-text {
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem); line-height: 1.5; color: #fff;
+    background: rgba(255,255,255,0.15); padding: 15px; border-radius: 15px;
+    margin-top: 10px; max-height: 25vh; overflow-y: auto;
+    text-align: left; width: 100%;
+}
+.btn-action {
+    margin-top: 15px; padding: 12px 30px; border: none;
+    background: white; color: var(--accent-pink);
+    font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 1.1rem;
+    border-radius: 50px; cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s, background 0.2s;
+    animation: pulseText 2s infinite;
+}
+.btn-action:hover { transform: scale(1.05); background: #fff0f5; }
+/* Animations */
+@keyframes floatUp { 0% { transform: translateY(110vh) scale(0); opacity: 0; } 50% { opacity: 0.6; } 100% { transform: translateY(-10vh) scale(1); opacity: 0; } }
+/* Fixed Balloon Animation: Starts at 0 (bottom: -100px) and moves UP to -120vh */
+@keyframes floatBalloon { 
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.8; } 
+    100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; } 
+}
+@keyframes floatGame { 0% { transform: translateY(110vh) rotate(0deg); } 100% { transform: translateY(-20vh) rotate(360deg); } }
+@keyframes pulseText { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes flicker { 0% { transform: translateX(-50%) skewX(-2deg) scale(1); opacity: 1; } 100% { transform: translateX(-50%) skewX(2deg) scale(0.95); opacity: 0.8; } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.hidden { display: none !important; }

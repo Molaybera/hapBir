@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Special Surprise ✨</title>
+    <link rel="stylesheet" href="./style.css">
+    <!-- Import dreamy fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <div id="ambient-bg"></div>
+    <div id="balloon-bg"></div>
+
+    <!-- Mini Game UI -->
+    <div id="game-ui">
+        <div class="progress-bar-container" id="progress-container">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="instruction-toast" id="instructions">
+            Catch Hearts to unlock the surprise! 💓
+        </div>
+        <div id="heart-spawner"></div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="glass-card hidden" id="main-card">
+        
+        <!-- 1. Gift Box -->
+        <div id="gift-stage" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+            <h1 class="title">You made it👍</h1>
+            <p class="subtitle">Just one more tap...</p>
+            
+            <div class="gift-wrapper" id="gift-btn">
+                <div class="lid-bow"></div>
+                <div class="box-lid"><div class="box-ribbon"></div></div>
+                <div class="box-body"><div class="box-ribbon"></div></div>
+            </div>
+        </div>
+
+        <!-- 2. Envelope Stage -->
+        <div id="envelope-stage" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+            <h1 class="title">Letter for my princess<br>(The Gudiya)</h1>
+            <p class="subtitle" id="env-hint">Tap to open...</p>
+            
+            <div class="envelope-container" id="envelope-btn">
+                <div class="flap"></div>
+                <div class="pocket"></div>
+                <div class="pocket-front"></div>
+            </div>
+
+            <div class="letter-content" id="opened-letter-content">
+                <div class="photo-frame">
+                    <img id="slideshow-img" src="" alt="Birthday Girl">
+                </div>
+                <div class="letter-text" id="typewriter-area"></div>
+                <!-- Changed to go to Cake -->
+                <button class="btn-action hidden" id="to-cake-btn">Make a Wish 🎂</button>
+            </div>
+        </div>
+
+        <!-- 3. Cake Stage (Moved before Scratch) -->
+        <div class="cake-stage" id="cake-stage">
+            <h1 class="title">Make a Wish...</h1>
+            <p class="subtitle">Tap the candle flam to blow it out! ✨</p>
+            
+            <div class="cake-container">
+                <div class="plate"></div>
+                <div class="cake-base"></div>
+                <div class="cake-layer-top">
+                    <div class="cake-icing"></div>
+                    <div class="candle-container"><div class="flame" id="flame"></div></div>
+                </div>
+            </div>
+            <p class="subtitle hidden" id="wished-msg" style="margin-top:20px; color:#fff;">May all your dreams come true🎈🪅🎈<br>(avoiding boys🤞)</p>
+            
+            <!-- Button to go to Scratch Card -->
+            <button class="btn-action hidden" id="to-scratch-btn">One Last Surprise ✨</button>
+        </div>
+
+        <!-- 4. Scratch Card Stage (Last) -->
+        <div class="scratch-stage" id="scratch-stage">
+            <h1 class="title">Hidden Memory</h1>
+            <p class="subtitle">Scratch to reveal... ❤️</p>
+            
+            <div class="scratch-container">
+                <img src="./img/7.jpeg" class="scratch-image" alt="Us">
+                <canvas class="scratch-canvas" id="scratch-canvas"></canvas>
+            </div>
+            
+            <h2 class="subtitle hidden" id="final-msg" style="margin-top:10px;">I Love My Gudiya! I Love To Irritate My Gudiya</h2>
+        </div>
+    </div>
+    <a href="https://molaybera.github.io/portfolio/" class="Legend" target="_blank">The Legend himself</a>
+    <script src="./script.js" defer></script>
+</body>
+</html>
