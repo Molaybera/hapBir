@@ -14,6 +14,7 @@
     -webkit-tap-highlight-color: transparent;
 }
 body {
+    height: 100dvh;
     height: 100vh;
     width: 100vw;
     overflow: hidden;
@@ -342,7 +343,7 @@ h1.title {
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .hidden { display: none !important; }
 
-.Legend{
+.Legend {
     text-decoration: none;
     color: #fdfbf7;
     height: auto;
@@ -351,6 +352,9 @@ h1.title {
     background-color: red;
     border-radius: 10px;
     position: absolute;
-    bottom: 10px;
+    bottom: max(20px, env(safe-area-inset-bottom)); 
     right: 10px;
+    z-index: 9999; 
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
