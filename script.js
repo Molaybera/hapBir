@@ -11,6 +11,11 @@ const CONFIG = {
         "./img/6.jpg",
     ]
 };
+// --- PRELOADER---
+CONFIG.photos.forEach(src => {
+    const i = new Image();
+    i.src = src;
+});
 /* --- Game Logic --- */
 let score = 0;
 let gameActive = true;
@@ -97,33 +102,32 @@ document.getElementById('to-scratch-btn').addEventListener('click', () => {
     }, 500);
 });
 /* --- Helper Functions --- */
-// Slideshow - Fixed Timing & Preloader
 function startSlideshow() {
     const img = document.getElementById('slideshow-img');
     let idx = 0;
     
-    // Preload images
-    CONFIG.photos.forEach(src => {
-        const i = new Image();
-        i.src = src;
-    });
+    // Ensure first image is set
     img.src = CONFIG.photos[0];
     
     setInterval(() => {
+        // 1. Fade out current image
         img.style.opacity = 0;
         
-        // Wait for fade out
+        // 2. Wait 500ms for fade out transition to complete
         setTimeout(() => {
+            // Determine next image
             idx = (idx + 1) % CONFIG.photos.length;
+            
+            // Swap source
             img.src = CONFIG.photos[idx];
             
-            // Fade In
-            img.onload = () => { img.style.opacity = 1; };
-            setTimeout(() => { img.style.opacity = 1; }, 50); 
-            
+            // 3. Fade in new image
+            img.style.opacity = 1;
         }, 500); 
-    }, 2500);
+        
+    }, 1500); // runs every 1.5 seconds
 }
+
 // Typewriter
 function typeWriter(el, text, i = 0) {
     if (i < text.length) {
